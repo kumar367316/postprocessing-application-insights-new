@@ -60,3 +60,42 @@ Using generated security password: 534e2bfa-0547-4fff-8da7-44a89d0876bf
 2022-05-18 14:30:00,697 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - no file for post processing
 2022-05-18 14:31:00,012 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - insights-new:start postProcessing batch DevOps pipeline deployment testing
 2022-05-18 14:31:00,379 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - no file for post processing
+2022-05-18 14:32:00,007 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - insights-new:start postProcessing batch DevOps pipeline deployment testing
+2022-05-18 14:32:00,069 [reactor-http-nio-1] WARN  r.netty.http.client.HttpClientConnect              - [cd1779af-19, L:/192.168.43.117:60480 - R:pmapostprcoessing.blob.core.windows.net/20.60.241.107:443] The connection observed an error
+java.io.IOException: An existing connection was forcibly closed by the remote host
+	at sun.nio.ch.SocketDispatcher.read0(Native Method)
+	at sun.nio.ch.SocketDispatcher.read(SocketDispatcher.java:43)
+	at sun.nio.ch.IOUtil.readIntoNativeBuffer(IOUtil.java:223)
+	at sun.nio.ch.IOUtil.read(IOUtil.java:192)
+	at sun.nio.ch.SocketChannelImpl.read(SocketChannelImpl.java:380)
+	at io.netty.buffer.PooledByteBuf.setBytes(PooledByteBuf.java:258)
+	at io.netty.buffer.AbstractByteBuf.writeBytes(AbstractByteBuf.java:1132)
+	at io.netty.channel.socket.nio.NioSocketChannel.doReadBytes(NioSocketChannel.java:350)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:151)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:722)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:584)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:496)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:986)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.run(Thread.java:748)
+2022-05-18 14:32:05,629 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - no file for post processing
+2022-05-18 14:33:00,003 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - insights-new:start postProcessing batch DevOps pipeline deployment testing
+2022-05-18 14:33:00,341 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - no file for post processing
+2022-05-18 14:34:00,006 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - insights-new:start postProcessing batch DevOps pipeline deployment testing
+2022-05-18 14:34:00,333 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - no file for post processing
+2022-05-18 14:35:00,009 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - insights-new:start postProcessing batch DevOps pipeline deployment testing
+2022-05-18 14:35:00,355 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - no file for post processing
+2022-05-18 14:36:00,015 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - insights-new:start postProcessing batch DevOps pipeline deployment testing
+2022-05-18 14:36:00,345 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - no file for post processing
+2022-05-18 14:37:00,010 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - insights-new:start postProcessing batch DevOps pipeline deployment testing
+2022-05-18 14:37:00,380 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - no file for post processing
+2022-05-18 14:38:00,011 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - insights-new:start postProcessing batch DevOps pipeline deployment testing
+2022-05-18 14:38:00,338 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - no file for post processing
+2022-05-18 14:39:00,001 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - insights-new:start postProcessing batch DevOps pipeline deployment testing
+2022-05-18 14:39:00,329 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - no file for post processing
+2022-05-18 14:40:00,004 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - insights-new:start postProcessing batch DevOps pipeline deployment testing
+2022-05-18 14:40:00,329 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - no file for post processing
+2022-05-18 14:41:00,004 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - insights-new:start postProcessing batch DevOps pipeline deployment testing
+2022-05-18 14:41:00,324 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - no file for post processing
