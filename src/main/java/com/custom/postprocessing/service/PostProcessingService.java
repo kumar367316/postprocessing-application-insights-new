@@ -5,10 +5,7 @@ package com.custom.postprocessing.service;
  *
  */
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
@@ -23,11 +20,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-
+import com.aspose.pdf.facades.PdfFileEditor;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.pdfbox.multipdf.PDFMergerUtility;
-import org.apache.pdfbox.pdmodel.PDDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,9 +41,6 @@ import com.custom.postprocessing.constant.PostProcessingConstant;
 import com.custom.postprocessing.scheduler.PostProcessingScheduler;
 import com.custom.postprocessing.util.EmailUtil;
 import com.custom.postprocessing.util.PostProcessUtil;
-import com.groupdocs.conversion.Converter;
-import com.groupdocs.conversion.filetypes.FileType;
-import com.groupdocs.conversion.options.convert.ConvertOptions;
 import com.microsoft.azure.storage.CloudStorageAccount;
 import com.microsoft.azure.storage.StorageException;
 import com.microsoft.azure.storage.blob.CloudBlob;
@@ -126,11 +119,11 @@ public class PostProcessingService {
 			BlobClient dstBlobClient = blobContainerClient.getBlobClient(targetDirectory + blobItem.getName());
 			BlobClient srcBlobClient = blobContainerClient.getBlobClient(blobItem.getName());
 			String updateSrcUrl = srcBlobClient.getBlobUrl();
-			if (srcBlobClient.getBlobUrl().contains("%2F")) {
-				updateSrcUrl = srcBlobClient.getBlobUrl().replace("%2F", "/");
+			if (srcBlobClient.getBlobUrl().contains(BACKSLASH_ASCII)) {
+				updateSrcUrl = srcBlobClient.getBlobUrl().replace(BACKSLASH_ASCII, FILE_SEPARATION);
 			}
 			dstBlobClient.beginCopy(updateSrcUrl, null);
-			//srcBlobClient.delete();
+			srcBlobClient.delete();
 			moveSuccess = true;
 		}
 		return moveSuccess;
@@ -258,9 +251,16 @@ public class PostProcessingService {
 	public void convertPDFToPCL(String mergePdfFile) throws IOException {
 		try {
 			String outputPclFile = FilenameUtils.removeExtension(mergePdfFile) + PCL_EXTENSION;
-			Converter converter = new Converter(mergePdfFile);
-			ConvertOptions<?> convertOptions = FileType.fromExtension("pcl").getConvertOptions();
-			converter.convert(outputPclFile, convertOptions);
+			//License license = new License();
+			//license.setLicense(("D:\\aspose\\Aspose.PDF.Java.lic"));
+			PdfFileEditor fileEditor = new PdfFileEditor();
+			InputStream stream = new FileInputStream(mergePdfFile);
+			InputStream[] streamList = new InputStream[]{stream};
+			OutputStream outStream = new FileOutputStream(outputPclFile);
+			fileEditor.concatenate(streamList, outStream);
+			stream.close();
+			outStream.close();
+			fileEditor.setCloseConcatenatedStreams(true);
 			copyFileToTargetDirectory(outputPclFile, TRANSIT_DIRECTORY, PROCESSED_DIRECTORY);
 			pclFileList.add(outputPclFile);
 			new File(outputPclFile).delete();
