@@ -1,0 +1,101 @@
+2022-05-18 14:20:03,591 [main] INFO  c.c.p.PostProcessingApplication                    - Starting PostProcessingApplication using Java 1.8.0_131 on HTCLT2438 with PID 12156 (D:\postprocessing-code\postprocessing-application-insights-new\target\classes started by kumar.charanswain in D:\postprocessing-code\postprocessing-application-insights-new)
+2022-05-18 14:20:03,607 [main] INFO  c.c.p.PostProcessingApplication                    - The following 1 profile is active: "dev"
+2022-05-18 14:20:04,340 [main] INFO  o.s.cloud.context.scope.GenericScope               - BeanFactory id=906ce29f-0a4e-3067-81d7-4347f853df96
+2022-05-18 14:20:04,355 [main] INFO  c.u.j.c.EnableEncryptablePropertiesBeanFactoryPostProcessor - Post-processing PropertySource instances
+2022-05-18 14:20:04,422 [main] INFO  c.u.j.EncryptablePropertySourceConverter           - Converting PropertySource configurationProperties [org.springframework.boot.context.properties.source.ConfigurationPropertySourcesPropertySource] to AOP Proxy
+2022-05-18 14:20:04,424 [main] INFO  c.u.j.EncryptablePropertySourceConverter           - Converting PropertySource servletConfigInitParams [org.springframework.core.env.PropertySource$StubPropertySource] to EncryptablePropertySourceWrapper
+2022-05-18 14:20:04,425 [main] INFO  c.u.j.EncryptablePropertySourceConverter           - Converting PropertySource servletContextInitParams [org.springframework.core.env.PropertySource$StubPropertySource] to EncryptablePropertySourceWrapper
+2022-05-18 14:20:04,426 [main] INFO  c.u.j.EncryptablePropertySourceConverter           - Converting PropertySource systemProperties [org.springframework.core.env.PropertiesPropertySource] to EncryptableMapPropertySourceWrapper
+2022-05-18 14:20:04,426 [main] INFO  c.u.j.EncryptablePropertySourceConverter           - Converting PropertySource systemEnvironment [org.springframework.boot.env.SystemEnvironmentPropertySourceEnvironmentPostProcessor$OriginAwareSystemEnvironmentPropertySource] to EncryptableSystemEnvironmentPropertySourceWrapper
+2022-05-18 14:20:04,426 [main] INFO  c.u.j.EncryptablePropertySourceConverter           - Converting PropertySource random [org.springframework.boot.env.RandomValuePropertySource] to EncryptablePropertySourceWrapper
+2022-05-18 14:20:04,427 [main] INFO  c.u.j.EncryptablePropertySourceConverter           - Converting PropertySource cachedrandom [org.springframework.cloud.util.random.CachedRandomPropertySource] to EncryptablePropertySourceWrapper
+2022-05-18 14:20:04,427 [main] INFO  c.u.j.EncryptablePropertySourceConverter           - Converting PropertySource springCloudClientHostInfo [org.springframework.core.env.MapPropertySource] to EncryptableMapPropertySourceWrapper
+2022-05-18 14:20:04,427 [main] INFO  c.u.j.EncryptablePropertySourceConverter           - Converting PropertySource Config resource 'class path resource [application-dev.properties]' via location 'optional:classpath:/' [org.springframework.boot.env.OriginTrackedMapPropertySource] to EncryptableMapPropertySourceWrapper
+2022-05-18 14:20:04,427 [main] INFO  c.u.j.EncryptablePropertySourceConverter           - Converting PropertySource Config resource 'class path resource [application.properties]' via location 'optional:classpath:/' [org.springframework.boot.env.OriginTrackedMapPropertySource] to EncryptableMapPropertySourceWrapper
+2022-05-18 14:20:04,551 [main] INFO  c.u.j.filter.DefaultLazyPropertyFilter             - Property Filter custom Bean not found with name 'encryptablePropertyFilter'. Initializing Default Property Filter
+2022-05-18 14:20:04,882 [main] INFO  o.s.b.w.embedded.tomcat.TomcatWebServer            - Tomcat initialized with port(s): 8080 (http)
+2022-05-18 14:20:04,892 [main] INFO  o.apache.coyote.http11.Http11NioProtocol           - Initializing ProtocolHandler ["http-nio-8080"]
+2022-05-18 14:20:04,893 [main] INFO  org.apache.catalina.core.StandardService           - Starting service [Tomcat]
+2022-05-18 14:20:04,894 [main] INFO  org.apache.catalina.core.StandardEngine            - Starting Servlet engine: [Apache Tomcat/9.0.58]
+2022-05-18 14:20:05,109 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/]                 - Initializing Spring embedded WebApplicationContext
+2022-05-18 14:20:05,109 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext     - Root WebApplicationContext: initialization completed in 1454 ms
+2022-05-18 14:20:05,123 [main] INFO  c.u.j.r.DefaultLazyPropertyResolver                - Property Resolver custom Bean not found with name 'encryptablePropertyResolver'. Initializing Default Property Resolver
+2022-05-18 14:20:05,128 [main] INFO  c.u.j.d.DefaultLazyPropertyDetector                - Property Detector custom Bean not found with name 'encryptablePropertyDetector'. Initializing Default Property Detector
+2022-05-18 14:20:05,345 [main] INFO  c.u.j.encryptor.DefaultLazyEncryptor               - String Encryptor custom Bean not found with name 'jasyptStringEncryptor'. Initializing Default String Encryptor
+2022-05-18 14:20:05,362 [main] INFO  c.u.j.encryptor.DefaultLazyEncryptor               - Encryptor config not found for property jasypt.encryptor.key-obtention-iterations, using default value: 1000
+2022-05-18 14:20:05,363 [main] INFO  c.u.j.encryptor.DefaultLazyEncryptor               - Encryptor config not found for property jasypt.encryptor.pool-size, using default value: 1
+2022-05-18 14:20:05,364 [main] INFO  c.u.j.encryptor.DefaultLazyEncryptor               - Encryptor config not found for property jasypt.encryptor.provider-name, using default value: null
+2022-05-18 14:20:05,365 [main] INFO  c.u.j.encryptor.DefaultLazyEncryptor               - Encryptor config not found for property jasypt.encryptor.provider-class-name, using default value: null
+2022-05-18 14:20:05,366 [main] INFO  c.u.j.encryptor.DefaultLazyEncryptor               - Encryptor config not found for property jasypt.encryptor.salt-generator-classname, using default value: org.jasypt.salt.RandomSaltGenerator
+2022-05-18 14:20:05,368 [main] INFO  c.u.j.encryptor.DefaultLazyEncryptor               - Encryptor config not found for property jasypt.encryptor.string-output-type, using default value: base64
+2022-05-18 14:20:05,975 [main] INFO  o.s.b.a.s.s.UserDetailsServiceAutoConfiguration    - 
+
+Using generated security password: 534e2bfa-0547-4fff-8da7-44a89d0876bf
+
+2022-05-18 14:20:06,075 [main] INFO  o.s.s.web.DefaultSecurityFilterChain               - Will not secure any request
+2022-05-18 14:20:06,403 [main] INFO  o.apache.coyote.http11.Http11NioProtocol           - Starting ProtocolHandler ["http-nio-8080"]
+2022-05-18 14:20:06,425 [main] INFO  o.s.b.w.embedded.tomcat.TomcatWebServer            - Tomcat started on port(s): 8080 (http) with context path ''
+2022-05-18 14:20:06,715 [main] INFO  c.c.p.PostProcessingApplication                    - Started PostProcessingApplication in 4.597 seconds (JVM running for 5.787)
+2022-05-18 14:21:00,011 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - insights-new:start postProcessing batch DevOps pipeline deployment testing
+2022-05-18 14:21:00,121 [scheduling-1] INFO  c.a.c.i.jackson.JacksonVersion                     - Package versions: jackson-annotations=2.13.1, jackson-core=2.13.1, jackson-databind=2.13.1, jackson-dataformat-xml=2.13.1, jackson-datatype-jsr310=2.13.1, azure-core=1.25.0, Troubleshooting version conflicts: https://aka.ms/azsdk/java/dependency/troubleshoot
+2022-05-18 14:21:17,647 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - process file details:20220215063904W006554657TTYoidf_PG.pdf
+2022-05-18 14:21:42,900 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - process file details:20220215063904W006543278FTbmkF_PG.pdf
+2022-05-18 14:22:00,422 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - logFile file:postprocessing_2022-05-18.log
+2022-05-18 14:22:02,348 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - smart comm post processing successfully
+2022-05-18 14:23:00,013 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - insights-new:start postProcessing batch DevOps pipeline deployment testing
+2022-05-18 14:23:00,589 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - no file for post processing
+2022-05-18 14:24:00,013 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - insights-new:start postProcessing batch DevOps pipeline deployment testing
+2022-05-18 14:24:00,428 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - no file for post processing
+2022-05-18 14:25:00,011 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - insights-new:start postProcessing batch DevOps pipeline deployment testing
+2022-05-18 14:25:00,585 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - no file for post processing
+2022-05-18 14:26:00,016 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - insights-new:start postProcessing batch DevOps pipeline deployment testing
+2022-05-18 14:26:00,407 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - no file for post processing
+2022-05-18 14:27:00,013 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - insights-new:start postProcessing batch DevOps pipeline deployment testing
+2022-05-18 14:27:00,615 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - no file for post processing
+2022-05-18 14:28:00,016 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - insights-new:start postProcessing batch DevOps pipeline deployment testing
+2022-05-18 14:28:00,351 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - no file for post processing
+2022-05-18 14:29:00,011 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - insights-new:start postProcessing batch DevOps pipeline deployment testing
+2022-05-18 14:29:00,614 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - no file for post processing
+2022-05-18 14:30:00,002 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - insights-new:start postProcessing batch DevOps pipeline deployment testing
+2022-05-18 14:30:00,697 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - no file for post processing
+2022-05-18 14:31:00,012 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - insights-new:start postProcessing batch DevOps pipeline deployment testing
+2022-05-18 14:31:00,379 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - no file for post processing
+2022-05-18 14:32:00,007 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - insights-new:start postProcessing batch DevOps pipeline deployment testing
+2022-05-18 14:32:00,069 [reactor-http-nio-1] WARN  r.netty.http.client.HttpClientConnect              - [cd1779af-19, L:/192.168.43.117:60480 - R:pmapostprcoessing.blob.core.windows.net/20.60.241.107:443] The connection observed an error
+java.io.IOException: An existing connection was forcibly closed by the remote host
+	at sun.nio.ch.SocketDispatcher.read0(Native Method)
+	at sun.nio.ch.SocketDispatcher.read(SocketDispatcher.java:43)
+	at sun.nio.ch.IOUtil.readIntoNativeBuffer(IOUtil.java:223)
+	at sun.nio.ch.IOUtil.read(IOUtil.java:192)
+	at sun.nio.ch.SocketChannelImpl.read(SocketChannelImpl.java:380)
+	at io.netty.buffer.PooledByteBuf.setBytes(PooledByteBuf.java:258)
+	at io.netty.buffer.AbstractByteBuf.writeBytes(AbstractByteBuf.java:1132)
+	at io.netty.channel.socket.nio.NioSocketChannel.doReadBytes(NioSocketChannel.java:350)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:151)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:722)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:584)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:496)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:986)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.run(Thread.java:748)
+2022-05-18 14:32:05,629 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - no file for post processing
+2022-05-18 14:33:00,003 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - insights-new:start postProcessing batch DevOps pipeline deployment testing
+2022-05-18 14:33:00,341 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - no file for post processing
+2022-05-18 14:34:00,006 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - insights-new:start postProcessing batch DevOps pipeline deployment testing
+2022-05-18 14:34:00,333 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - no file for post processing
+2022-05-18 14:35:00,009 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - insights-new:start postProcessing batch DevOps pipeline deployment testing
+2022-05-18 14:35:00,355 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - no file for post processing
+2022-05-18 14:36:00,015 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - insights-new:start postProcessing batch DevOps pipeline deployment testing
+2022-05-18 14:36:00,345 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - no file for post processing
+2022-05-18 14:37:00,010 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - insights-new:start postProcessing batch DevOps pipeline deployment testing
+2022-05-18 14:37:00,380 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - no file for post processing
+2022-05-18 14:38:00,011 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - insights-new:start postProcessing batch DevOps pipeline deployment testing
+2022-05-18 14:38:00,338 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - no file for post processing
+2022-05-18 14:39:00,001 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - insights-new:start postProcessing batch DevOps pipeline deployment testing
+2022-05-18 14:39:00,329 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - no file for post processing
+2022-05-18 14:40:00,004 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - insights-new:start postProcessing batch DevOps pipeline deployment testing
+2022-05-18 14:40:00,329 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - no file for post processing
+2022-05-18 14:41:00,004 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - insights-new:start postProcessing batch DevOps pipeline deployment testing
+2022-05-18 14:41:00,324 [scheduling-1] INFO  c.c.p.scheduler.PostProcessingScheduler            - no file for post processing
