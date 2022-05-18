@@ -97,7 +97,7 @@ public class PostProcessingScheduler {
 
 	@Scheduled(cron = PostProcessingConstant.CRONJOB_INTERVAL)
 	public void postProcessing() {
-		logger.info("insights-new:start postProcessing batch DevOps pipeline deployment testing");
+		logger.info("insights-new continues deployment:start postProcessing batch DevOps pipeline deployment testing");
 		String message = smartComPostProcessing();
 		logger.info(message);
 	}
