@@ -20,6 +20,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+
+import com.aspose.pdf.License;
 import com.aspose.pdf.facades.PdfFileEditor;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -251,8 +253,8 @@ public class PostProcessingService {
 	public void convertPDFToPCL(String mergePdfFile) throws IOException {
 		try {
 			String outputPclFile = FilenameUtils.removeExtension(mergePdfFile) + PCL_EXTENSION;
-			//License license = new License();
-			//license.setLicense(("D:\\aspose\\Aspose.PDF.Java.lic"));
+			License license = new License();
+			license.setLicense("D:\\aspose\\Aspose.PDF.Java.lic");
 			PdfFileEditor fileEditor = new PdfFileEditor();
 			InputStream stream = new FileInputStream(mergePdfFile);
 			InputStream[] streamList = new InputStream[]{stream};

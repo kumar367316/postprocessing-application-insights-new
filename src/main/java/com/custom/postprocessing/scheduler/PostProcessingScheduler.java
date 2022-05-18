@@ -31,6 +31,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import com.aspose.pdf.BuildVersionInfo;
 import com.aspose.pdf.License;
 import com.aspose.pdf.facades.PdfFileEditor;
 import org.apache.commons.io.FilenameUtils;
@@ -138,7 +139,7 @@ public class PostProcessingScheduler {
 				updateSrcUrl = srcBlobClient.getBlobUrl().replace(BACKSLASH_ASCII, FILE_SEPARATION);
 			}
 			dstBlobClient.beginCopy(updateSrcUrl, null);
-			srcBlobClient.delete();
+			//srcBlobClient.delete();
 			moveSuccess = true;
 		}
 		return moveSuccess;
@@ -266,8 +267,9 @@ public class PostProcessingScheduler {
 	public void convertPDFToPCL(String mergePdfFile) throws IOException {
 		try {
 			String outputPclFile = FilenameUtils.removeExtension(mergePdfFile) + PCL_EXTENSION;
-			//License license = new License();
-			//license.setLicense(("D:\\aspose\\Aspose.PDF.Java.lic"));
+			License license = new License();
+			license.setLicense("D:\\aspose\\Aspose.PDF.Java.lic");
+			System.out.println(BuildVersionInfo.ASSEMBLY_VERSION);
 			PdfFileEditor fileEditor = new PdfFileEditor();
 			InputStream stream = new FileInputStream(mergePdfFile);
 			InputStream[] streamList = new InputStream[]{stream};
