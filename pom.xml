@@ -107,14 +107,14 @@
 		<dependency>
 			<groupId>com.aspose</groupId>
 			<artifactId>aspose-pdf</artifactId>
-			<version>17.7</version>
+			<version>18.11</version>
 		</dependency>
 	</dependencies>
 	<repositories>
 		<repository>
 			<id>AsposeJavaAPI</id>
 			<name>Aspose Java API</name>
-			<url>https://repository.aspose.com/repo/</url>
+			<url>https://artifact.aspose.com/repo/</url>
 		</repository>
 	</repositories>
 	<dependencyManagement>
