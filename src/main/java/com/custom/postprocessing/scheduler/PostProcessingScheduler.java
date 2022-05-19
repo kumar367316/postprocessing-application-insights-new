@@ -146,7 +146,7 @@ public class PostProcessingScheduler {
 				updateSrcUrl = srcBlobClient.getBlobUrl().replace(BACKSLASH_ASCII, FILE_SEPARATION);
 			}
 			dstBlobClient.beginCopy(updateSrcUrl, null);
-			// srcBlobClient.delete();
+			srcBlobClient.delete();
 			moveSuccess = true;
 		}
 		return moveSuccess;
