@@ -20,6 +20,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+
+import com.aspose.pdf.License;
 import com.aspose.pdf.facades.PdfFileEditor;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -51,7 +53,6 @@ import com.microsoft.azure.storage.blob.CloudBlockBlob;
 import com.microsoft.azure.storage.blob.ListBlobItem;
 
 import static com.custom.postprocessing.constant.PostProcessingConstant.*;
-import static com.custom.postprocessing.constant.PostProcessingConstant.PCL_EXTENSION;
 
 /**
  * @author kumar.charanswain
@@ -123,14 +124,13 @@ public class PostProcessingService {
 				updateSrcUrl = srcBlobClient.getBlobUrl().replace(BACKSLASH_ASCII, FILE_SEPARATION);
 			}
 			dstBlobClient.beginCopy(updateSrcUrl, null);
-			srcBlobClient.delete();
+			// srcBlobClient.delete();
 			moveSuccess = true;
 		}
 		return moveSuccess;
 	}
 
-	public String processMetaDataInputFile(CloudBlobDirectory transitDirectory,
-										   String currentDate){
+	public String processMetaDataInputFile(CloudBlobDirectory transitDirectory, String currentDate) {
 		ConcurrentHashMap<String, List<String>> postProcessMap = new ConcurrentHashMap<>();
 		String message = "smart comm post processing successfully";
 		try {
@@ -226,7 +226,7 @@ public class PostProcessingService {
 				String mergePdfFile = fileType + "-merge" + "-" + currentDate + PDF_EXTENSION;
 				PDFMerger.setDestinationFileName(mergePdfFile);
 				PDFMerger.mergeDocuments();
-				convertPDFToPCL(mergePdfFile);
+				convertPDFToPCL(mergePdfFile, container);
 				updatePostProcessMap.put(fileType, fileNameList);
 				bannerFile.delete();
 				new File(mergePdfFile).delete();
@@ -244,18 +244,25 @@ public class PostProcessingService {
 		if (postProcessMap.size() > 0) {
 			emailUtil.emailProcess(updatePostProcessMap, currentDate);
 		}
+		File licenseFile = new File(LICENSE_FILE_NAME);
+		licenseFile.delete();
 		return message;
 	}
 
 	// post processing PDF to PCL conversion
-	public void convertPDFToPCL(String mergePdfFile) throws IOException {
+	public void convertPDFToPCL(String mergePdfFile, CloudBlobContainer container) throws IOException {
 		try {
 			String outputPclFile = FilenameUtils.removeExtension(mergePdfFile) + PCL_EXTENSION;
-			//License license = new License();
-			//license.setLicense(("D:\\aspose\\Aspose.PDF.Java.lic"));
+			CloudBlobDirectory transitDirectory = getDirectoryName(container, LICENSE_DIRECTORY, "");
+			CloudBlockBlob blob = transitDirectory.getBlockBlobReference(LICENSE_FILE_NAME);
+			String licenseFiles[] = blob.getName().split("/");
+			String licenseFileName = licenseFiles[1];
+			blob.downloadToFile(new File(licenseFileName).getAbsolutePath());
+			License license = new License();
+			license.setLicense(licenseFileName);
 			PdfFileEditor fileEditor = new PdfFileEditor();
 			InputStream stream = new FileInputStream(mergePdfFile);
-			InputStream[] streamList = new InputStream[]{stream};
+			InputStream[] streamList = new InputStream[] { stream };
 			OutputStream outStream = new FileOutputStream(outputPclFile);
 			fileEditor.concatenate(streamList, outStream);
 			stream.close();
@@ -350,7 +357,7 @@ public class PostProcessingService {
 	}
 
 	public CloudBlobDirectory getDirectoryName(CloudBlobContainer container, String directoryName,
-											   String subDirectoryName) throws URISyntaxException {
+			String subDirectoryName) throws URISyntaxException {
 		CloudBlobDirectory cloudBlobDirectory = container.getDirectoryReference(directoryName);
 		if (StringUtils.isBlank(subDirectoryName)) {
 			return cloudBlobDirectory;
@@ -366,11 +373,11 @@ public class PostProcessingService {
 		return fileName.get();
 	}
 
-	public void deletePreviousLogFile(){
+	public void deletePreviousLogFile() {
 		LocalDate date = LocalDate.now();
 		LocalDate previousDate = date.minusDays(1);
-		File previousDayLogFile = new File("postprocessing_"+previousDate+".log");
-		if(previousDayLogFile.exists()){
+		File previousDayLogFile = new File("postprocessing_" + previousDate + ".log");
+		if (previousDayLogFile.exists()) {
 			previousDayLogFile.delete();
 		}
 	}
