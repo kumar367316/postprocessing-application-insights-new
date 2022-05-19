@@ -30,6 +30,7 @@ public class PostProcessingConstant {
     public static final String XML_EXTENSION = ".xml";
     public static final String PDF_TYPE = "pdf";
     public static final String MULTIPAGE = "MultiPage";
-
     public static final String BACKSLASH_ASCII = "%2F";
+    public static final String LICENSE_DIRECTORY = "license";
+    public static final String LICENSE_FILE_NAME = "Aspose.PDF.Java.lic";
 }
