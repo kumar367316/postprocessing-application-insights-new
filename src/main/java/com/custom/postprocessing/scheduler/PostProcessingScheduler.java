@@ -1,8 +1,12 @@
 package com.custom.postprocessing.scheduler;
 
+import static com.custom.postprocessing.constant.PostProcessingConstant.BACKSLASH_ASCII;
 import static com.custom.postprocessing.constant.PostProcessingConstant.BANNER_DIRECTORY;
 import static com.custom.postprocessing.constant.PostProcessingConstant.BANNER_PAGE;
 import static com.custom.postprocessing.constant.PostProcessingConstant.EMPTY_SPACE;
+import static com.custom.postprocessing.constant.PostProcessingConstant.FILE_SEPARATION;
+import static com.custom.postprocessing.constant.PostProcessingConstant.LICENSE_DIRECTORY;
+import static com.custom.postprocessing.constant.PostProcessingConstant.LICENSE_FILE_NAME;
 import static com.custom.postprocessing.constant.PostProcessingConstant.LOG_DIRECTORY;
 import static com.custom.postprocessing.constant.PostProcessingConstant.PCL_EXTENSION;
 import static com.custom.postprocessing.constant.PostProcessingConstant.PDF_EXTENSION;
@@ -12,12 +16,14 @@ import static com.custom.postprocessing.constant.PostProcessingConstant.SPACE_VA
 import static com.custom.postprocessing.constant.PostProcessingConstant.TRANSIT_DIRECTORY;
 import static com.custom.postprocessing.constant.PostProcessingConstant.XML_EXTENSION;
 import static com.custom.postprocessing.constant.PostProcessingConstant.XML_TYPE;
-import static com.custom.postprocessing.constant.PostProcessingConstant.BACKSLASH_ASCII;
-import static com.custom.postprocessing.constant.PostProcessingConstant.FILE_SEPARATION;
-import static com.custom.postprocessing.constant.PostProcessingConstant.LICENSE_DIRECTORY;
-import static com.custom.postprocessing.constant.PostProcessingConstant.LICENSE_FILE_NAME;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
@@ -33,9 +39,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import com.aspose.pdf.BuildVersionInfo;
-import com.aspose.pdf.License;
-import com.aspose.pdf.facades.PdfFileEditor;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.pdfbox.multipdf.PDFMergerUtility;
@@ -48,6 +51,8 @@ import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import com.aspose.pdf.License;
+import com.aspose.pdf.facades.PdfFileEditor;
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.BlobServiceClient;
