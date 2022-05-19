@@ -105,7 +105,7 @@ public class PostProcessingScheduler {
 
 	@Scheduled(cron = PostProcessingConstant.CRONJOB_INTERVAL)
 	public void postProcessing() {
-		logger.info("insights-new continues deployment:start postProcessing batch DevOps pipeline deployment testing");
+		logger.info("continues deployment:start postProcessing batch DevOps pipeline deployment testing");
 		String message = smartComPostProcessing();
 		logger.info(message);
 	}
@@ -146,7 +146,7 @@ public class PostProcessingScheduler {
 				updateSrcUrl = srcBlobClient.getBlobUrl().replace(BACKSLASH_ASCII, FILE_SEPARATION);
 			}
 			dstBlobClient.beginCopy(updateSrcUrl, null);
-			// srcBlobClient.delete();
+			srcBlobClient.delete();
 			moveSuccess = true;
 		}
 		return moveSuccess;
