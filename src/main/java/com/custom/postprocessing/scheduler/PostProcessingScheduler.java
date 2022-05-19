@@ -1,8 +1,12 @@
 package com.custom.postprocessing.scheduler;
 
+import static com.custom.postprocessing.constant.PostProcessingConstant.BACKSLASH_ASCII;
 import static com.custom.postprocessing.constant.PostProcessingConstant.BANNER_DIRECTORY;
 import static com.custom.postprocessing.constant.PostProcessingConstant.BANNER_PAGE;
 import static com.custom.postprocessing.constant.PostProcessingConstant.EMPTY_SPACE;
+import static com.custom.postprocessing.constant.PostProcessingConstant.FILE_SEPARATION;
+import static com.custom.postprocessing.constant.PostProcessingConstant.LICENSE_DIRECTORY;
+import static com.custom.postprocessing.constant.PostProcessingConstant.LICENSE_FILE_NAME;
 import static com.custom.postprocessing.constant.PostProcessingConstant.LOG_DIRECTORY;
 import static com.custom.postprocessing.constant.PostProcessingConstant.PCL_EXTENSION;
 import static com.custom.postprocessing.constant.PostProcessingConstant.PDF_EXTENSION;
@@ -16,7 +20,10 @@ import static com.custom.postprocessing.constant.PostProcessingConstant.XML_TYPE
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
@@ -35,7 +42,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.pdfbox.multipdf.PDFMergerUtility;
-import org.apache.pdfbox.pdmodel.PDDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +51,8 @@ import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import com.aspose.pdf.License;
+import com.aspose.pdf.facades.PdfFileEditor;
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.BlobServiceClient;
@@ -53,9 +61,6 @@ import com.azure.storage.blob.models.BlobItem;
 import com.custom.postprocessing.constant.PostProcessingConstant;
 import com.custom.postprocessing.util.EmailUtil;
 import com.custom.postprocessing.util.PostProcessUtil;
-import com.groupdocs.conversion.Converter;
-import com.groupdocs.conversion.filetypes.FileType;
-import com.groupdocs.conversion.options.convert.ConvertOptions;
 import com.microsoft.azure.storage.CloudStorageAccount;
 import com.microsoft.azure.storage.StorageException;
 import com.microsoft.azure.storage.blob.CloudBlob;
@@ -100,7 +105,7 @@ public class PostProcessingScheduler {
 
 	@Scheduled(cron = PostProcessingConstant.CRONJOB_INTERVAL)
 	public void postProcessing() {
-		logger.info("insights-new:start postProcessing batch DevOps pipeline deployment testing");
+		logger.info("insights-new continues deployment:start postProcessing batch DevOps pipeline deployment testing");
 		String message = smartComPostProcessing();
 		logger.info(message);
 	}
@@ -137,18 +142,17 @@ public class PostProcessingScheduler {
 			BlobClient dstBlobClient = blobContainerClient.getBlobClient(targetDirectory + blobItem.getName());
 			BlobClient srcBlobClient = blobContainerClient.getBlobClient(blobItem.getName());
 			String updateSrcUrl = srcBlobClient.getBlobUrl();
-			if (srcBlobClient.getBlobUrl().contains("%2F")) {
-				updateSrcUrl = srcBlobClient.getBlobUrl().replace("%2F", "/");
+			if (srcBlobClient.getBlobUrl().contains(BACKSLASH_ASCII)) {
+				updateSrcUrl = srcBlobClient.getBlobUrl().replace(BACKSLASH_ASCII, FILE_SEPARATION);
 			}
 			dstBlobClient.beginCopy(updateSrcUrl, null);
-			srcBlobClient.delete();
+			// srcBlobClient.delete();
 			moveSuccess = true;
 		}
 		return moveSuccess;
 	}
 
-	public String processMetaDataInputFile(CloudBlobDirectory transitDirectory,
-			String currentDate){
+	public String processMetaDataInputFile(CloudBlobDirectory transitDirectory, String currentDate) {
 		ConcurrentHashMap<String, List<String>> postProcessMap = new ConcurrentHashMap<>();
 		String message = "smart comm post processing successfully";
 		try {
@@ -244,7 +248,7 @@ public class PostProcessingScheduler {
 				String mergePdfFile = fileType + "-merge" + "-" + currentDate + PDF_EXTENSION;
 				PDFMerger.setDestinationFileName(mergePdfFile);
 				PDFMerger.mergeDocuments();
-				convertPDFToPCL(mergePdfFile);
+				convertPDFToPCL(mergePdfFile, container);
 				updatePostProcessMap.put(fileType, fileNameList);
 				bannerFile.delete();
 				new File(mergePdfFile).delete();
@@ -262,16 +266,30 @@ public class PostProcessingScheduler {
 		if (postProcessMap.size() > 0) {
 			emailUtil.emailProcess(updatePostProcessMap, currentDate);
 		}
+		File licenseFile = new File(LICENSE_FILE_NAME);
+		licenseFile.delete();
 		return message;
 	}
 
 	// post processing PDF to PCL conversion
-	public void convertPDFToPCL(String mergePdfFile) throws IOException {
+	public void convertPDFToPCL(String mergePdfFile, CloudBlobContainer container) throws IOException {
 		try {
 			String outputPclFile = FilenameUtils.removeExtension(mergePdfFile) + PCL_EXTENSION;
-			Converter converter = new Converter(mergePdfFile);
-			ConvertOptions<?> convertOptions = FileType.fromExtension("pcl").getConvertOptions();
-			converter.convert(outputPclFile, convertOptions);
+			CloudBlobDirectory transitDirectory = getDirectoryName(container, LICENSE_DIRECTORY, "");
+			CloudBlockBlob blob = transitDirectory.getBlockBlobReference(LICENSE_FILE_NAME);
+			String licenseFiles[] = blob.getName().split("/");
+			String licenseFileName = licenseFiles[1];
+			blob.downloadToFile(new File(licenseFileName).getAbsolutePath());
+			License license = new License();
+			license.setLicense(licenseFileName);
+			PdfFileEditor fileEditor = new PdfFileEditor();
+			InputStream stream = new FileInputStream(mergePdfFile);
+			InputStream[] streamList = new InputStream[] { stream };
+			OutputStream outStream = new FileOutputStream(outputPclFile);
+			fileEditor.concatenate(streamList, outStream);
+			stream.close();
+			outStream.close();
+			fileEditor.setCloseConcatenatedStreams(true);
 			copyFileToTargetDirectory(outputPclFile, TRANSIT_DIRECTORY, PROCESSED_DIRECTORY);
 			pclFileList.add(outputPclFile);
 			new File(outputPclFile).delete();
@@ -377,11 +395,11 @@ public class PostProcessingScheduler {
 		return fileName.get();
 	}
 
-	public void deletePreviousLogFile(){
+	public void deletePreviousLogFile() {
 		LocalDate date = LocalDate.now();
 		LocalDate previousDate = date.minusDays(1);
-		File previousDayLogFile = new File("postprocessing_"+previousDate+".log");
-		if(previousDayLogFile.exists()){
+		File previousDayLogFile = new File("postprocessing_" + previousDate + ".log");
+		if (previousDayLogFile.exists()) {
 			previousDayLogFile.delete();
 		}
 	}
