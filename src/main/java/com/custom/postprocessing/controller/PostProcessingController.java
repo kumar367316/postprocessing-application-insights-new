@@ -20,4 +20,9 @@ public class PostProcessingController {
     public String manualPostProcessBatch() {
         return postProcessingService.smartComPostProcessing();
     }
+    
+    @GetMapping(path = "/manualarchive")
+    public String manualManualArchive() {
+        return postProcessingService.archivePostProcessing();
+    }
 }
