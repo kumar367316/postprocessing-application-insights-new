@@ -1,5 +1,7 @@
 package com.custom.postprocessing.scheduler;
 
+import static com.custom.postprocessing.constant.PostProcessingConstant.ARCHIVE_DIRECTORY;
+import static com.custom.postprocessing.constant.PostProcessingConstant.ARCHIVE_VALUE;
 import static com.custom.postprocessing.constant.PostProcessingConstant.BACKSLASH_ASCII;
 import static com.custom.postprocessing.constant.PostProcessingConstant.BANNER_DIRECTORY;
 import static com.custom.postprocessing.constant.PostProcessingConstant.BANNER_PAGE;
@@ -8,10 +10,13 @@ import static com.custom.postprocessing.constant.PostProcessingConstant.FILE_SEP
 import static com.custom.postprocessing.constant.PostProcessingConstant.LICENSE_DIRECTORY;
 import static com.custom.postprocessing.constant.PostProcessingConstant.LICENSE_FILE_NAME;
 import static com.custom.postprocessing.constant.PostProcessingConstant.LOG_DIRECTORY;
+import static com.custom.postprocessing.constant.PostProcessingConstant.LOG_FILE;
 import static com.custom.postprocessing.constant.PostProcessingConstant.PCL_EXTENSION;
 import static com.custom.postprocessing.constant.PostProcessingConstant.PDF_EXTENSION;
+import static com.custom.postprocessing.constant.PostProcessingConstant.POSTPROCESSING_DIRECTORY;
 import static com.custom.postprocessing.constant.PostProcessingConstant.PRINT_DIRECTORY;
 import static com.custom.postprocessing.constant.PostProcessingConstant.PROCESSED_DIRECTORY;
+import static com.custom.postprocessing.constant.PostProcessingConstant.ROOT_DIRECTORY;
 import static com.custom.postprocessing.constant.PostProcessingConstant.SPACE_VALUE;
 import static com.custom.postprocessing.constant.PostProcessingConstant.TRANSIT_DIRECTORY;
 import static com.custom.postprocessing.constant.PostProcessingConstant.XML_EXTENSION;
@@ -61,6 +66,7 @@ import com.azure.storage.blob.models.BlobItem;
 import com.custom.postprocessing.constant.PostProcessingConstant;
 import com.custom.postprocessing.util.EmailUtil;
 import com.custom.postprocessing.util.PostProcessUtil;
+import com.custom.postprocessing.util.ZipUtility;
 import com.microsoft.azure.storage.CloudStorageAccount;
 import com.microsoft.azure.storage.StorageException;
 import com.microsoft.azure.storage.blob.CloudBlob;
@@ -103,11 +109,16 @@ public class PostProcessingScheduler {
 
 	List<String> pclFileList = new LinkedList<>();
 
-	@Scheduled(cron = PostProcessingConstant.CRONJOB_INTERVAL)
+	@Scheduled(cron = PostProcessingConstant.CRONJOB_ARCHIVEINTERVAL)
 	public void postProcessing() {
-		logger.info("continues deployment:start postProcessing batch DevOps pipeline deployment testing");
+		logger.info("continues deployment2:start postProcessing batch DevOps pipeline deployment testing");
 		String message = smartComPostProcessing();
 		logger.info(message);
+	}
+
+	@Scheduled(cron = PostProcessingConstant.CRONJOB_INTERVAL)
+	public void archivedPostProcessingScheduler() {
+		archivePostProcessing();
 	}
 
 	public String smartComPostProcessing() {
@@ -115,14 +126,14 @@ public class PostProcessingScheduler {
 		String currentDate = currentDateTime();
 		try {
 			CloudBlobContainer container = containerInfo();
-			CloudBlobDirectory transitDirectory = getDirectoryName(container, TRANSIT_DIRECTORY,
+			CloudBlobDirectory transitDirectory = getDirectoryName(container, POSTPROCESSING_DIRECTORY + TRANSIT_DIRECTORY,
 					currentDate + "-" + PRINT_DIRECTORY);
-			String transitTargetDirectory = TRANSIT_DIRECTORY + "/" + currentDate + "-";
+			String transitTargetDirectory = POSTPROCESSING_DIRECTORY + TRANSIT_DIRECTORY + "/" + currentDate + "-";
 			if (moveFileToTargetDirectory(PRINT_DIRECTORY, transitTargetDirectory)) {
 				messageInfo = processMetaDataInputFile(transitDirectory, currentDate);
-				String logFile = "postprocessing_" + currentDate + ".log";
+				String logFile = LOG_FILE + currentDate + ".log";
 				logger.info("logFile file:" + logFile);
-				copyFileToTargetDirectory(logFile, LOG_DIRECTORY, "");
+				copyFileToTargetDirectory(logFile, "postprocessing", LOG_DIRECTORY);
 				deletePreviousLogFile();
 			} else {
 				messageInfo = "no file for post processing";
@@ -132,6 +143,20 @@ public class PostProcessingScheduler {
 			messageInfo = "error in copy file to blob directory";
 		}
 		return messageInfo;
+	}
+
+	public void archivePostProcessing() {
+		String message = "post processing archive completed successfully";
+		try {
+			String currentDate = currentDateTime();
+			String targetDirectory = POSTPROCESSING_DIRECTORY + TRANSIT_DIRECTORY + "/" + currentDate + "-"
+					+ ARCHIVE_DIRECTORY;
+			message = zipFileTransferToArchive(currentDate, ARCHIVE_DIRECTORY, targetDirectory);
+		} catch (Exception exception) {
+			message = "error in post processing archive";
+			logger.info("error in archive file:" + exception.getMessage());
+		}
+		logger.info(message);
 	}
 
 	private boolean moveFileToTargetDirectory(String sourceDirectory, String targetDirectory) {
@@ -145,6 +170,7 @@ public class PostProcessingScheduler {
 			if (srcBlobClient.getBlobUrl().contains(BACKSLASH_ASCII)) {
 				updateSrcUrl = srcBlobClient.getBlobUrl().replace(BACKSLASH_ASCII, FILE_SEPARATION);
 			}
+			dstBlobClient.copyFromUrl(updateSrcUrl);
 			dstBlobClient.beginCopy(updateSrcUrl, null);
 			srcBlobClient.delete();
 			moveSuccess = true;
@@ -235,8 +261,8 @@ public class PostProcessingScheduler {
 				File bannerFile = new File(bannerFileName);
 				PDFMerger.addSource(bannerFileName);
 				Collections.sort(fileNameList);
-				CloudBlobDirectory transitDirectory = getDirectoryName(container, TRANSIT_DIRECTORY + "/",
-						currentDate + "-" + PRINT_DIRECTORY);
+				CloudBlobDirectory transitDirectory = getDirectoryName(container,
+						POSTPROCESSING_DIRECTORY + TRANSIT_DIRECTORY + "/", currentDate + "-" + PRINT_DIRECTORY);
 				for (String fileName : fileNameList) {
 					logger.info("process file details:" + fileName);
 					File file = new File(fileName);
@@ -275,10 +301,10 @@ public class PostProcessingScheduler {
 	public void convertPDFToPCL(String mergePdfFile, CloudBlobContainer container) throws IOException {
 		try {
 			String outputPclFile = FilenameUtils.removeExtension(mergePdfFile) + PCL_EXTENSION;
-			CloudBlobDirectory transitDirectory = getDirectoryName(container, LICENSE_DIRECTORY, "");
+			CloudBlobDirectory transitDirectory = getDirectoryName(container, ROOT_DIRECTORY, LICENSE_DIRECTORY);
 			CloudBlockBlob blob = transitDirectory.getBlockBlobReference(LICENSE_FILE_NAME);
 			String licenseFiles[] = blob.getName().split("/");
-			String licenseFileName = licenseFiles[1];
+			String licenseFileName = licenseFiles[licenseFiles.length - 1];
 			blob.downloadToFile(new File(licenseFileName).getAbsolutePath());
 			License license = new License();
 			license.setLicense(licenseFileName);
@@ -290,7 +316,7 @@ public class PostProcessingScheduler {
 			stream.close();
 			outStream.close();
 			fileEditor.setCloseConcatenatedStreams(true);
-			copyFileToTargetDirectory(outputPclFile, TRANSIT_DIRECTORY, PROCESSED_DIRECTORY);
+			copyFileToTargetDirectory(outputPclFile, POSTPROCESSING_DIRECTORY + TRANSIT_DIRECTORY, PROCESSED_DIRECTORY);
 			pclFileList.add(outputPclFile);
 			new File(outputPclFile).delete();
 		} catch (Exception exception) {
@@ -352,7 +378,7 @@ public class PostProcessingScheduler {
 	public String getBannerPage(String key)
 			throws URISyntaxException, StorageException, FileNotFoundException, IOException {
 		CloudBlobContainer container = containerInfo();
-		CloudBlobDirectory transitDirectory = getDirectoryName(container, BANNER_DIRECTORY, "");
+		CloudBlobDirectory transitDirectory = getDirectoryName(container, ROOT_DIRECTORY, BANNER_DIRECTORY);
 		String bannerFileName = BANNER_PAGE + key + PDF_EXTENSION;
 		CloudBlockBlob blob = transitDirectory.getBlockBlobReference(bannerFileName);
 		File source = new File(bannerFileName);
@@ -398,9 +424,43 @@ public class PostProcessingScheduler {
 	public void deletePreviousLogFile() {
 		LocalDate date = LocalDate.now();
 		LocalDate previousDate = date.minusDays(1);
-		File previousDayLogFile = new File("postprocessing_" + previousDate + ".log");
+		File previousDayLogFile = new File(LOG_FILE + previousDate + ".log");
 		if (previousDayLogFile.exists()) {
 			previousDayLogFile.delete();
 		}
+	}
+
+	public String zipFileTransferToArchive(String currentDate, String rootDirectoryName, String targetDirectory)
+			throws IOException {
+		String message = "post processing archive completed successfully";
+		try {
+			CloudBlobContainer container = containerInfo();
+			BlobContainerClient blobContainerClient = getBlobContainerClient(connectionNameKey, containerName);
+			CloudBlobDirectory transitDirectory = getDirectoryName(container, rootDirectoryName, "");
+			Iterable<BlobItem> listBlobs = blobContainerClient.listBlobsByHierarchy(rootDirectoryName);
+			List<String> files = new LinkedList<String>();
+			String archiveZipFileName = currentDate + "-" + ARCHIVE_VALUE;
+			for (BlobItem blobItem : listBlobs) {
+				String fileNames[] = StringUtils.split(blobItem.getName(), "/");
+				String fileName = fileNames[fileNames.length - 1];
+				File file = new File(fileName);
+				CloudBlockBlob blob = transitDirectory.getBlockBlobReference(fileName);
+				blob.downloadToFile(file.getPath());
+				files.add(fileName);
+				blob.delete();
+			}
+			if (files.size() > 0) {
+				ZipUtility zipUtility = new ZipUtility();
+				zipUtility.zipProcessing(files, archiveZipFileName);
+				copyFileToTargetDirectory(archiveZipFileName, "",targetDirectory);
+				deleteFiles(files);
+				new File(archiveZipFileName).delete();
+			}else {
+				message = "no file for archive";
+			}
+		} catch (Exception exception) {
+			logger.info("exception:" + exception.getMessage());
+		}
+		return message;
 	}
 }

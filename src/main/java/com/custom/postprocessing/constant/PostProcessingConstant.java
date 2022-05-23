@@ -8,7 +8,7 @@ package com.custom.postprocessing.constant;
 public class PostProcessingConstant {
 
     // public static final String cronTimeTransitInterVal = "0 0 10 * * ?";
-    public static final String CRONJOB_ARCHIVEINTERVAL = "0 */5 * ? * *";
+    public static final String CRONJOB_ARCHIVEINTERVAL = "0 */4 * ? * *";
     public static final String CRONJOB_INTERVAL = "0 * * ? * *";
     public static final String TRANSIT_DIRECTORY = "transit";
     public static final String PRINT_DIRECTORY = "print/";
@@ -33,4 +33,7 @@ public class PostProcessingConstant {
     public static final String BACKSLASH_ASCII = "%2F";
     public static final String LICENSE_DIRECTORY = "license";
     public static final String LICENSE_FILE_NAME = "Aspose.PDF.Java.lic";
+    public static final String ROOT_DIRECTORY = "postprocessing";
+    public static final String POSTPROCESSING_DIRECTORY = "postprocessing/";
+    public static final String LOG_FILE = "postprocessing_";
 }
